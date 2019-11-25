@@ -15,3 +15,105 @@
 ```String s1 = "a";s1 = s1 + "b";```等同于```StringBuilder s2 = new StringBuilder("a");s2.append("b");```
 - 所以在进行大量字符串拼接时，如果使用String，就会频繁的创建StringBuilder对象，造成对内存的浪费，所以需要使用StringBuilder对象
 ### 线程安全问题
+- demo代码
+```
+/**
+ * @description: String, StringBuffer, StringBuilder测试
+ * @author: BadGuy
+ * @date: 2019-11-25 20:14
+ **/
+public class StringTest {
+
+    public static void main(String[] args) throws InterruptedException {
+        StringBuilder builder = new StringBuilder("");
+        for (int i = 0;i <5; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int j = 0; j < 1000; j++) {
+                        builder.append("a");
+                    }
+                    System.out.println(Thread.currentThread().getName() + "执行完毕！");
+                }
+            }).start();
+        }
+        Thread.sleep(100);
+        System.out.println("字符串长度为："+builder.length());
+
+        StringBuffer buffer = new StringBuffer("");
+        for (int i = 0;i <5; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int j = 0; j < 1000; j++) {
+                        buffer.append("a");
+                    }
+                    System.out.println(Thread.currentThread().getName() + "执行完毕！");
+                }
+            }).start();
+        }
+        Thread.sleep(100);
+        System.out.println("字符串长度为："+buffer.length());
+    }
+```
+- 执行结果
+```
+Thread-0执行完毕！
+Thread-1执行完毕！
+Thread-2执行完毕！
+Thread-3执行完毕！
+Thread-4执行完毕！
+字符串长度为：4996
+Thread-5执行完毕！
+Thread-8执行完毕！
+Thread-9执行完毕！
+Thread-6执行完毕！
+Thread-7执行完毕！
+字符串长度为：5000
+```
+- 分析
+1. 使用StringBuilder执行后的字符串长度不等于5000且每次执行后长度都不一定相同
+2. 以下为StringBuilder的append方法源码
+```
+    @Override
+    public StringBuilder append(String str) {
+        super.append(str);
+        return this;
+    }
+```
+3. 以下为StringBuffer的append方法源码
+```
+    @Override
+    public synchronized StringBuffer append(String str) {
+        toStringCache = null;
+        super.append(str);
+        return this;
+    }
+```
+4. StringBuffer和StringBuilder都继承于AbstractStringBuilder，以下为部分源码
+```
+abstract class AbstractStringBuilder implements Appendable, CharSequence {
+    /**
+     * The value is used for character storage.
+     */
+    char[] value;
+
+    /**
+     * The count is the number of characters used.
+     */
+    int count;
+    
+    public AbstractStringBuilder append(String str) {
+        if (str == null)
+            return appendNull();
+        int len = str.length();
+        ensureCapacityInternal(count + len);
+        str.getChars(0, len, value, count);
+        count += len;
+        return this;
+    }
+}
+```
+5. 由此可以看出在AbstractStringBuilder的成员变量count在多线程中，使用StringBuilder不一定能获取到正确值，而StringBuffer的append方法是加了锁的，count作为共享资源，不会被多个线程同时使用，在某个线程使用时，其他线程会等待，所以最后count累加后的值才会是正确值，但是因此StringBuffer效率没有StringBuilder高
+
+[参考网址](https://www.jianshu.com/p/3f6a46145fd9)
