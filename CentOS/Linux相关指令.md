@@ -2,6 +2,7 @@
 - cat /etc/redhat-release：查看操作系统版本号
 - cat /proc/cpuinfo：查看CPU信息
 - cat /proc/cpuinfo| grep "cpu cores"| uniq：查看CPU核心数
+- uname -a：查看内核版本
 - env：查看环境变量
 - uptime：查看系统运行时间，用户数，负载情况
 - top：查看进程活动以及一些系统状况 [参数详解](https://blog.csdn.net/ai2000ai/article/details/79786459)
@@ -45,6 +46,9 @@
 - systemctl stop xxx：服务关闭
 - systemctl disable xxx：关闭服务的开机自启动
 - systemctl enable xxx：开启服务的开机自启动
+###### 下载安装
+- rpm -qa | grep xxxx：查看rpm是否安装了某个软件
+- yum list installed | grep perl：查看yum是否安装了某个软件
 ###### 实用案例
 - 用grep遍历目标目录下的所有包含某字符串的文件
 ```
