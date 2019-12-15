@@ -126,3 +126,45 @@ drop trigger trigger_name;
 - 如果需要对输入存储过程的参数进行更改，或者要更改由其返回的数据，则您仍需要更新程序集中的代码以添加参数、更新调用，等等，这时候估计会比较繁琐了。
 - 开发调试复杂，由于IDE的问题，存储过程的开发调试要比一般程序困难。   - 没办法应用缓存。虽然有全局临时表之类的方法可以做缓存，但同样加重了数据库的负担。如果缓存并发严重，经常要加锁，那效率实在堪忧。
 - 不支持群集，数据库服务器无法水平扩展，或者数据库的切割（水平或垂直切割）。数据库切割之后，存储过程并不清楚数据存储在哪个数据库中。
+###### 存储过程写法(根据以上示例)
+- 无参数写法
+```
+//创建存储过程
+CREATE PROCEDURE pro ()
+BEGIN
+	SELECT * from `user`;
+END;
+
+//调用存储过程
+CALL pro ()
+```
+- 有参数写法
+```
+CREATE PROCEDURE pro(IN targetId VARCHAR(100),OUT loginName VARCHAR(255))
+# 提示信息
+COMMENT '根据id查询用户'
+# 指明只有定义此sql的人才能执行，默认也是这个
+SQL SECURITY DEFINER
+BEGIN
+	SELECT account INTO loginName from `user` WHERE id = targetId;
+END
+
+CALL pro ('1',@loginName);
+SELECT @loginName;
+```
+- 存储函数
+```
+# 创建函数
+CREATE FUNCTION getLoginName(userId VARCHAR(11)) RETURNS VARCHAR(255)
+BEGIN
+RETURN (SELECT account FROM `user` WHERE id = userId);
+END
+# 调用函数并取值
+SELECT getLoginName('1')
+```
+[存储过程语法拓展](https://blog.csdn.net/yanluandai1985/article/details/83656374)
+
+[自定义函数](https://www.cnblogs.com/progor/p/8871480.html)
+
+###### 存储过程中提交事务问题
+- 如果存储过程中没有执行commit，那么spring容器一旦发生了事务回滚，存储过程执行的操作也会回滚。如果存储过程执行了commit，那么数据库自身的事务此时已提交，这时即使在spring容器中托管了事务，并且由于其他原因导致service代码中产生异常而自动回滚，但此存储过程是不会回滚，因为数据自身的事务已在存储过程执行完毕前提交了，  也就是说此时spring回滚对存储过程的操作是无效的了。
