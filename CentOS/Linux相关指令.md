@@ -58,3 +58,16 @@ grep -R   "some_code"  YOUR_DIR
 # 如果你不需要显示内容，只需要含有某个字符的文件： 
 grep -lR   "some_code"  YOUR_DIR
 ```
+- 在Linux服务器上部署SpringBoot项目:首先将SpringBoot项目打包成JAR包,通过xFTP或者其他工具将JAR包上传到Linux上,然后执行如下命令启动项目:
+```
+java -jar xxx.jar &
+# 该命令启动jar,一旦Xshell窗口关闭,JAR就停止运行了.
+# 如果想让项目在后台一直运行,通过如下命令启动JAR:
+nohup java -jar xxx.jar  > consoleMsg.log 2>&1 &
+# 上面的2 和 1 的意思如下:
+# 0    标准输入（一般是键盘）
+# 1    标准输出（一般是显示屏，是用户终端控制台）
+# 2    标准错误（错误信息输出）
+# 注意:consoleMsg.log文件要先创建,执行命令
+touch consoleMsg.log
+```
