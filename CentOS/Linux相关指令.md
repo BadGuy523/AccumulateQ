@@ -49,6 +49,10 @@
 ###### 下载安装
 - rpm -qa | grep xxxx：查看rpm是否安装了某个软件
 - yum list installed | grep perl：查看yum是否安装了某个软件
+- rpm -qa:查看所有已安装软件名称
+- rpm -ql xxxx:显示软件的安装路径
+- rpm -qa | grep xxxx：列出所有安装的xxxx
+- rpm -qal | grep xxxx：
 ###### 实用案例
 - 用grep遍历目标目录下的所有包含某字符串的文件
 ```
