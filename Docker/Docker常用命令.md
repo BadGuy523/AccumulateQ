@@ -37,7 +37,15 @@ docker run --name code-demo-9091 -d -p 9091:8081 code_demo_image
 docker run --name code-demo-9092 -d -P code_demo_image
 # 经实验，此种创建方式也会自动随机映射端口
 docker run --name code-demo-9093 -d -p 8081 code_demo_image
+# --network=host,表示不做端口映射，宿主机端口与容器端口一一对应
+# -v /dir:/dir2 表示宿主机目录挂载到容器目录，：前面为宿主机，后面为容器
+# /bin/bash的作用是因为docker后台必须运行一个进程，否则容器就会退出，在这里表示启动容器后启动bash
+docker run -d --network=host --name computing-ioc-ma2 -v /opt/computing-ioc-ma:/data 69a3a8ff9980 /bin/bash
 
+```
+- 进入docker容器
+```
+docker exec -it container_name /bin/bash
 ```
 - [EXPOSE详解](https://blog.csdn.net/finalheart/article/details/100751447)
 - [修改容器配置](https://www.jianshu.com/p/1c4ca951849d)
