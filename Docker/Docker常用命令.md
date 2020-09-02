@@ -16,6 +16,13 @@ ENTRYPOINT ["java","-jar","/docker-demo.jar"]   #运行jar包的指令
 # 这样可以不手动-p指定端口映射关系，更简洁了，从而使EXPOSE发挥最大的作用。而不是简单的随机映射宿主机&&起到注释作用。
 # 而这么做不灵活点在于宿主机的端口被EXPOSE固定。如果宿主机端口被其他进程占用，就port already in use了。
 
+# 另一种方式,建立一个data目录，用作后面的虚拟机和宿主机的地址映射
+FROM java:8
+run mkdir -p /data/   
+EXPOSE 8082
+ENTRYPOINT ["java","-jar","/data/demo.jar"]
+
+
 ```
 - 创建docker镜像命令
 ```
