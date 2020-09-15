@@ -57,24 +57,24 @@ docker exec -it container_name /bin/bash
 - docker日志处理（按时间3天分割日志，并定时清理超过30天的日志）
 ```
 #split_docker_logs_by_three_day.sh执行文件
-logs=`find /var/lib/docker/containers/ -name *-json.log`  //查询所有以-json.log结尾的文件
-for docker_log in $logs   //循环日志文件
+logs=`find /var/lib/docker/containers/ -name *-json.log`  #查询所有以-json.log结尾的文件
+for docker_log in $logs   #循环日志文件
 do
-        DATE=`date +%F`   //获取当前日期
-        cp $docker_log $docker_log.$DATE    //复制原日志文件，文件名加上当前日期
-        echo "" > $docker_log     //清空原日志文件
+        DATE=`date +%F`   #获取当前日期
+        cp $docker_log $docker_log.$DATE    #复制原日志文件，文件名加上当前日期
+        echo "" > $docker_log     #清空原日志文件
 done
 
 #rm_docker_log_by_one_month.sh执行文件
-logs=`find /var/lib/docker/containers/`     //查询目录下所有文件
-for log in $logs    //循环文件
+logs=`find /var/lib/docker/containers/`     #查询目录下所有文件
+for log in $logs    #循环文件
 do
-        FILE=${log%%.*}   //以最后一个.分割文件，取左边部分
-        DATE=${log##*.}   //以最后一个.分割文件，取右边部分
-        if echo $DATE | grep -Eq "[0-9]{4}-[0-9]{2}-[0-9]{2}" && date -d $DATE +%Y%m%d > /dev/null 2>&1   //判断右边部分是否为日期格式
+        FILE=${log%%.*}   #以最后一个.分割文件，取左边部分
+        DATE=${log##*.}   #以最后一个.分割文件，取右边部分
+        if echo $DATE | grep -Eq "[0-9]{4}-[0-9]{2}-[0-9]{2}" && date -d $DATE +%Y%m%d > /dev/null 2>&1   #判断右边部分是否为日期格式
         then
-                days=$((($(date +%s)-$(date +%s -d $DATE))/86400))    //若为日期格式，则判断与当前日期所差天数
-                if [ $days -gt 30 ]     //若大于30天   则删除日志文件
+                days=$((($(date +%s)-$(date +%s -d $DATE))/86400))    #若为日期格式，则判断与当前日期所差天数
+                if [ $days -gt 30 ]     #若大于30天   则删除日志文件
                 then
                         rm -rf $log
                 fi
