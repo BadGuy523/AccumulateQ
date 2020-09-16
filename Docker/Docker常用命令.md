@@ -81,7 +81,14 @@ do
         fi
 done
 ```
+- centos定时任务执行以上两个脚本
+```
+crontab -e      #编辑定时任务
 
+#定时任务内容
+* * */3 * * /bin/bash /opt/log_split_schedule/split_docker_log_by_three_day.sh
+* * */1 * * /bin/bash /opt/log_split_schedule/rm_docker_log_by_one_month.sh
+```
 - [shell命令判断日期格式是否正确](https://blog.csdn.net/weixin_30725315/article/details/97744504)
 - [shell命令计算日期之间的天数](https://blog.csdn.net/mydriverc2/article/details/78592107)
 - [shell命令截取文件名和文件目录](https://blog.csdn.net/u010670689/article/details/53425111)
