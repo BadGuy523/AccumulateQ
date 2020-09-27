@@ -91,6 +91,11 @@ crontab -e      #编辑定时任务
 
 #加上可执行权限
 chmod +x rm_docker_log_by_one_month.sh
+
+#docker查看内存占用
+```
+docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}"
+```
 ```
 - [shell命令判断日期格式是否正确](https://blog.csdn.net/weixin_30725315/article/details/97744504)
 - [shell命令计算日期之间的天数](https://blog.csdn.net/mydriverc2/article/details/78592107)
