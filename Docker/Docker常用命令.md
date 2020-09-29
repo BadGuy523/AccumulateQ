@@ -47,7 +47,7 @@ docker run --name code-demo-9093 -d -p 8081 code_demo_image
 # --network=host,表示不做端口映射，宿主机端口与容器端口一一对应
 # -v /dir:/dir2 表示宿主机目录挂载到容器目录，：前面为宿主机，后面为容器
 # /bin/bash的作用是因为docker后台必须运行一个进程，否则容器就会退出，在这里表示启动容器后启动bash
-docker run -d --network=host --name computing-ioc-ma2 -v /opt/computing-ioc-ma:/data 69a3a8ff9980 /bin/bash
+docker run -d --network=host --name demo -v /opt/demo:/data 69a3a8ff9980 /bin/bash
 
 ```
 - 进入docker容器
