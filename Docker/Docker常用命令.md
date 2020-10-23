@@ -49,6 +49,8 @@ docker run --name code-demo-9093 -d -p 8081 code_demo_image
 # /bin/bash的作用是因为docker后台必须运行一个进程，否则容器就会退出，在这里表示启动容器后启动bash
 docker run -d --network=host --name demo -v /opt/demo:/data 69a3a8ff9980 /bin/bash
 
+docker create -it --network=host --name=demo -v /opt/demo:/data 908ee5463221 /bin/bash
+
 ```
 - 进入docker容器
 ```
