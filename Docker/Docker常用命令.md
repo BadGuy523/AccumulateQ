@@ -98,7 +98,23 @@ chmod +x rm_docker_log_by_one_month.sh
 ```
 docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}"
 ```
+
+#docker日志引擎切换
 ```
+在docker的1.12.3版本以前默认使用的日志引擎是json-file，而在1.12.6之后的版本却将默认日志引擎修改成了journald，这样虽然减少了container log对磁盘的占用，但是在某些时候也带来了一些不方便。
+
+CentOS7 docker-1.12.6修改日志引擎，具体修改地址
+
+/etc/sysconfig/docker
+打开后，在其中会看到一行
+
+OPTIONS='--selinux-enabled --log-driver=journald --signature-verification=false'
+将其中的--log-driver=journald修改为--log-driver=json-file，然后使用如下命令重启docker
+
+service docker restart
+当然，这个方法也适用于将日志引擎从json-file修改成journald。
+```
+
 - [shell命令判断日期格式是否正确](https://blog.csdn.net/weixin_30725315/article/details/97744504)
 - [shell命令计算日期之间的天数](https://blog.csdn.net/mydriverc2/article/details/78592107)
 - [shell命令截取文件名和文件目录](https://blog.csdn.net/u010670689/article/details/53425111)
