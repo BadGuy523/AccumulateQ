@@ -95,12 +95,9 @@ crontab -e      #编辑定时任务
 chmod +x rm_docker_log_by_one_month.sh
 
 #docker查看内存占用
-```
 docker stats --format "table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.MemPerc}}"
-```
 
 #docker日志引擎切换
-```
 在docker的1.12.3版本以前默认使用的日志引擎是json-file，而在1.12.6之后的版本却将默认日志引擎修改成了journald，这样虽然减少了container log对磁盘的占用，但是在某些时候也带来了一些不方便。
 
 CentOS7 docker-1.12.6修改日志引擎，具体修改地址
