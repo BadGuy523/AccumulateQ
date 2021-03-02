@@ -91,6 +91,9 @@ crontab -e      #编辑定时任务
 * * */3 * * /bin/bash /opt/log_split_schedule/split_docker_log_by_three_day.sh
 * * */1 * * /bin/bash /opt/log_split_schedule/rm_docker_log_by_one_month.sh
 
+#重启crond服务
+systemctl restart crond
+
 #加上可执行权限
 chmod +x rm_docker_log_by_one_month.sh
 
