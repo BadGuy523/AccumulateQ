@@ -24,6 +24,7 @@
 - systemctl restart firewalld.service：  重启防火墙
 - firewall-cmd --reload：   重新载入配置
 - systemtcl disable firewalld： 关闭防火墙开机自启
+- firewall-cmd --list-all  查看开放端口列表
 ###### 端口进程相关指令
 - netstat -nupl： 查看所有UDP类型的端口
 - netstat -ntpl： 查看所有TCP类型的端口
